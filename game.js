@@ -1,17 +1,22 @@
-function Game (first)
-{
-    this.turn = first
-    this.board = new Board(6, 7)
-    console.log(this.board.toString())
 
-    // callbacks
-    this.placementCallbacks = []
-    this.registerPlacementCallback(function(p) {
-        console.log("piece placed at " + p)
-    }, this)
-    this.registerPlacementCallback(this.checkForWin, this)
+Game = Ext.extend(Ext.util.Observable, {
+    constructor: function (config) {
+        this.addEvents({
+            'pieceDropped': true,
+            'win': true
+        })
 
-}
+        this.listeners = config.listeners
+
+        Game.superclass.constructor.call(this, config)
+
+        // finally
+        this.turn = PLAYER0
+        this.board = new Board(6, 7)
+        this.addListener('pieceDropped', this.winCheck)
+        console.log(this.board.toString())
+    }
+})
 
 Game.prototype.drop = function (colId)
 {
@@ -22,38 +27,28 @@ Game.prototype.drop = function (colId)
 
     console.log(this.board.toString())
 
-    this.placementCallbacks.forEach(function (callback) {
-        callback[1].call(callback[0], newPieceLocation)
-    })
+    this.fireEvent('pieceDropped', newPieceLocation)
 
     this.turn = (this.turn == PLAYER0 ? PLAYER1 : PLAYER0)
 }
 
-Game.prototype.registerPlacementCallback = function (cb, scope)
+Game.prototype.winCheck = function (p0)
 {
-    this.placementCallbacks.push([scope, cb])
-}
-
-Game.prototype.checkForWin = function (p)
-{
-    var lists = this.board.visit(p)
-    for (l in lists) {
-        var list = lists[l]
+    var lists = this.board.visit(p0)
+    Ext.each(lists, function (list) {
         if (list.length >= 4) {
-            console.log("check: " + list)
             var successes = 0
-            for (c in list) {
-                var cell = list[c]
-                if (this.board.at(p) == this.board.at(cell)) {
+            Ext.each(list, function (cell) {
+                if (this.board.at(p0) == this.board.at(cell)) {
                     successes++
-                    console.log("successes: " + successes)
                 } else {
-                    break
+                    return false  // no need to check more
                 }
                 if (successes >= 4) {
-                    console.log("WIN")
+                    this.fireEvent('win', this.board.at(p0))
+                    return false  // no need to check more
                 }
-            }
+            }, this)
         }
-    }
+    }, this)
 }

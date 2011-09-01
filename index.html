@@ -3,6 +3,7 @@
     <title>C4</title>
 </head>
 <body>
+    <script src="lib/touch/sencha-touch-debug-w-comments.js"></script>
     <script src="config.js"></script>
     <script src="vec2.js"></script>
     <script src="board.js"></script>
@@ -11,13 +12,24 @@
 
         var game = new Game(PLAYER0)
 
+        game.addListener('win', function (player) {
+            console.log("winner: " + player)
+        })
+
         game.drop(0)
         game.drop(6)
+
         game.drop(1)
         game.drop(6)
+
         game.drop(2)
         game.drop(6)
+
         game.drop(3)
+        game.drop(5)
+
+        game.drop(4)
+        game.drop(6)
 
     </script>
 </body>

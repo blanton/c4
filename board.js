@@ -72,7 +72,6 @@ Board.prototype.visit = function (p0)
 {
     var results = []
 
-    console.log("p0: " + p0.toString())
     console.assert(this.contains(p0))
 
     var directions = [
@@ -86,8 +85,7 @@ Board.prototype.visit = function (p0)
         vec2( 1,  1)  // SW
     ]
 
-    for (d in directions) {
-        var dir = directions[d]
+    Ext.each(directions, function (dir) {
         var p = p0
         var list = []
         while (this.contains(p)) {
@@ -95,7 +93,7 @@ Board.prototype.visit = function (p0)
             p = p.add(dir)
         }
         results.push(list)
-    }
+    }, this)
 
     return results
 }
