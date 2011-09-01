@@ -46,9 +46,52 @@ Board.prototype.drop = function (playerId, colId)
     for (var r = this.nbRows - 1; r >= 0; r--) {
         if (col[r] == EMPTY) {
             col[r] = playerId
-            return vec2(r, colId)
+            return vec2(colId, r)
         }
     }
     console.warn("column " + colId + " is full")
     return null
+}
+
+Board.prototype.contains = function (p)
+{
+    if (p.x < 0 || p.x >= this.nbCols ||
+        p.y < 0 || p.y >= this.nbRows)
+    {
+        return false
+    }
+    return true
+}
+
+Board.prototype.at = function (p)
+{
+    return this.cols[p.x][p.y]
+}
+
+Board.prototype.evaluate = function (p0)
+{
+    console.log("p0: " + p0.toString())
+    console.assert(this.contains(p0))
+
+    var directions = [
+        vec2( 1,  0), // W
+        vec2( 1, -1), // NW
+        vec2( 0, -1), // N
+        vec2(-1, -1), // NE
+        vec2(-1,  0), // E
+        vec2(-1,  1), // SE
+        vec2( 0,  1), // S
+        vec2( 1,  1)  // SW
+    ]
+
+    for (d in directions) {
+        var dir = directions[d]
+        console.log("dir: " + dir.toString())
+        var p = p0
+        while (this.contains(p)) {
+            console.log("p: " + p.toString() + ": " + this.at(p))
+            p = p.add(dir)
+        }
+    }
+
 }
