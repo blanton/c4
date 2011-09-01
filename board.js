@@ -46,7 +46,7 @@ Board.prototype.drop = function (playerId, colId)
     for (var r = this.nbRows - 1; r >= 0; r--) {
         if (col[r] == EMPTY) {
             col[r] = playerId
-            return [r, colId]
+            return vec2(r, colId)
         }
     }
     console.warn("column " + colId + " is full")

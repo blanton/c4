@@ -6,8 +6,8 @@ function Game (first)
 
     // callbacks
     this.placementCallbacks = []
-    this.placementCallbacks.push(function(r, c) {
-        console.log("piece placed at [%d, %d]", r, c)
+    this.placementCallbacks.push(function(p) {
+        console.log("piece placed at " + p)
     })
 
 }
@@ -22,7 +22,7 @@ Game.prototype.drop = function (colId)
     console.log(this.board.toString())
 
     this.placementCallbacks.forEach(function (callback) {
-        callback(newPieceLocation[0], newPieceLocation[1])
+        callback(newPieceLocation)
     })
 
     this.turn = (this.turn == PLAYER0 ? PLAYER1 : PLAYER0)
