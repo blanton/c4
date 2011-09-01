@@ -68,8 +68,10 @@ Board.prototype.at = function (p)
     return this.cols[p.x][p.y]
 }
 
-Board.prototype.evaluate = function (p0)
+Board.prototype.visit = function (p0)
 {
+    var results = []
+
     console.log("p0: " + p0.toString())
     console.assert(this.contains(p0))
 
@@ -86,12 +88,14 @@ Board.prototype.evaluate = function (p0)
 
     for (d in directions) {
         var dir = directions[d]
-        console.log("dir: " + dir.toString())
         var p = p0
+        var list = []
         while (this.contains(p)) {
-            console.log("p: " + p.toString() + ": " + this.at(p))
+            list.push(p)
             p = p.add(dir)
         }
+        results.push(list)
     }
 
+    return results
 }

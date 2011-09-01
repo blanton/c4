@@ -6,9 +6,10 @@ function Game (first)
 
     // callbacks
     this.placementCallbacks = []
-    this.placementCallbacks.push(function(p) {
+    this.registerPlacementCallback(function(p) {
         console.log("piece placed at " + p)
-    })
+    }, this)
+    this.registerPlacementCallback(this.checkForWin, this)
 
 }
 
@@ -22,8 +23,37 @@ Game.prototype.drop = function (colId)
     console.log(this.board.toString())
 
     this.placementCallbacks.forEach(function (callback) {
-        callback(newPieceLocation)
+        callback[1].call(callback[0], newPieceLocation)
     })
 
     this.turn = (this.turn == PLAYER0 ? PLAYER1 : PLAYER0)
+}
+
+Game.prototype.registerPlacementCallback = function (cb, scope)
+{
+    this.placementCallbacks.push([scope, cb])
+}
+
+Game.prototype.checkForWin = function (p)
+{
+    var lists = this.board.visit(p)
+    for (l in lists) {
+        var list = lists[l]
+        if (list.length >= 4) {
+            console.log("check: " + list)
+            var successes = 0
+            for (c in list) {
+                var cell = list[c]
+                if (this.board.at(p) == this.board.at(cell)) {
+                    successes++
+                    console.log("successes: " + successes)
+                } else {
+                    break
+                }
+                if (successes >= 4) {
+                    console.log("WIN")
+                }
+            }
+        }
+    }
 }
