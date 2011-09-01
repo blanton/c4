@@ -46,9 +46,9 @@ Board.prototype.drop = function (playerId, colId)
     for (var r = this.nbRows - 1; r >= 0; r--) {
         if (col[r] == EMPTY) {
             col[r] = playerId
-            return true
+            return [r, colId]
         }
     }
     console.warn("column " + colId + " is full")
-    return false
+    return null
 }

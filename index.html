@@ -5,25 +5,19 @@
 <body>
     <script src="config.js"></script>
     <script src="board.js"></script>
+    <script src="game.js"></script>
     <script>
-        var board = new Board(6, 7)
-        console.log(board.toString())
-        board.drop(PLAYER0, 0)
-        board.drop(PLAYER1, 0)
-        board.drop(PLAYER0, 1)
-        console.log(board.toString())
-        board.drop(PLAYER0, 1)
-        board.drop(PLAYER0, 1)
-        board.drop(PLAYER0, 1)
-        board.drop(PLAYER0, 1)
-        board.drop(PLAYER0, 1)
-        console.log(board.toString())
-        try {
-            board.drop(PLAYER0, 7) // should trigger exception
-        } catch (e) {
-            console.log(":)")
-        }
-        board.drop(PLAYER0, 1) // should trigger warning
+
+        var game = new Game(PLAYER0)
+
+        game.drop(0)
+        game.drop(6)
+        game.drop(1)
+        game.drop(6)
+        game.drop(2)
+        game.drop(6)
+        game.drop(3)
+
     </script>
 </body>
 </html>
