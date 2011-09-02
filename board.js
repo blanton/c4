@@ -74,14 +74,18 @@ Board.prototype.visit = function (p0)
 
     console.assert(this.contains(p0))
 
+    // aligning the directions (e.g. W to E)
     var directions = [
         vec2( 1,  0), // W
-        vec2( 1, -1), // NW
-        vec2( 0, -1), // N
-        vec2(-1, -1), // NE
         vec2(-1,  0), // E
+
+        vec2( 1, -1), // NW
         vec2(-1,  1), // SE
+
+        vec2( 0, -1), // N
         vec2( 0,  1), // S
+
+        vec2(-1, -1), // NE
         vec2( 1,  1)  // SW
     ]
 
