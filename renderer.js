@@ -4,6 +4,7 @@ Renderer = Ext.extend(Object, {
         Renderer.superclass.constructor.call(this, config)
 
         this.game.addListener('pieceDropped', this.render, this)
+        this.game.addListener('win', this.onWin, this)
     }
 })
 
@@ -41,4 +42,23 @@ Renderer.prototype.render = function ()
         }
     }
 
+}
+
+Renderer.prototype.onWin = function (player)
+{
+    // defer is so rendering can take place before alert
+    switch (player) {
+    case PLAYER0:
+        Ext.defer(function () {
+            alert("YOU WIN")
+        }, 10)
+        break
+    case PLAYER1:
+        Ext.defer(function () {
+            alert("you lose")
+        }, 10)
+        break
+    default:
+        break
+    }
 }
