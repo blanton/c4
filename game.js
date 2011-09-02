@@ -19,13 +19,13 @@ Game = Ext.extend(Ext.util.Observable, {
     }
 })
 
-Game.prototype.drop = function (colId)
+Game.prototype.drop = function (playerId, colId)
 {
-    if (this.locked) {
+    if (this.locked || playerId != this.turn) {
         return
     }
 
-    var newPieceLocation = this.board.drop(this.turn, colId)
+    var newPieceLocation = this.board.drop(playerId, colId)
     if (!newPieceLocation) {
         return
     }

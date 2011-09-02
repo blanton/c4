@@ -12,5 +12,5 @@ Agent.prototype.onPieceDropped = function (p)
     if (player == PLAYER1) {
         return
     }
-    this.game.drop(p.x)
+    this.game.drop(PLAYER1, p.x)
 }
