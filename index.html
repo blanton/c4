@@ -8,28 +8,24 @@
     <script src="vec2.js"></script>
     <script src="board.js"></script>
     <script src="game.js"></script>
+    <script src="agent.js"></script>
     <script>
 
         var game = new Game(PLAYER0)
 
         game.addListener('win', function (player) {
-            console.log("winner: " + player)
+            console.log("WINNER: " + player)
+        })
+
+        var agent = new Agent({
+            game: game
         })
 
         game.drop(0)
-        game.drop(6)
-
         game.drop(1)
-        game.drop(6)
-
-        game.drop(2)
-        game.drop(6)
-
         game.drop(3)
-        game.drop(5)
-
-        game.drop(4)
-        game.drop(6)
+        game.drop(2)
+        //game.drop(4)
 
     </script>
 </body>

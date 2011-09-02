@@ -25,11 +25,11 @@ Game.prototype.drop = function (colId)
         return
     }
 
+    this.turn = (this.turn == PLAYER0 ? PLAYER1 : PLAYER0)
+
     console.log(this.board.toString())
 
     this.fireEvent('pieceDropped', newPieceLocation)
-
-    this.turn = (this.turn == PLAYER0 ? PLAYER1 : PLAYER0)
 }
 
 Game.prototype.winCheck = function (p0)
