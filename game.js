@@ -14,12 +14,17 @@ Game = Ext.extend(Ext.util.Observable, {
         this.turn = PLAYER0
         this.board = new Board(6, 7)
         this.addListener('pieceDropped', this.winCheck)
+        this.locked = false
         console.log(this.board.toString())
     }
 })
 
 Game.prototype.drop = function (colId)
 {
+    if (this.locked) {
+        return
+    }
+
     var newPieceLocation = this.board.drop(this.turn, colId)
     if (!newPieceLocation) {
         return
@@ -54,6 +59,7 @@ Game.prototype.winCheck = function (p0)
             count++
         }
         if (count >= 3) {
+            this.locked = true
             this.fireEvent('win', p0Value)
             break
         }
