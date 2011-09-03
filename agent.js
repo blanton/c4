@@ -19,11 +19,13 @@ Agent.prototype.run = function ()
 {
     this.moves = []
 
+    // initialize
     for (var x = 0; x < this.game.board.cols.length; x++) {
         // create
         var move = this.moves[x] = {
             col: x,
-            score: Math.min(x, this.game.board.cols.length - x - 1)
+            //score: Math.min(x, this.game.board.cols.length - x - 1)
+            score: 0
         }
         // find pos
         var col = this.game.board.cols[x]
@@ -33,27 +35,37 @@ Agent.prototype.run = function ()
                 break
             }
         }
+        // prevent playing full cols (position is given iff an empty is found)
         if (!move.pos) {
             move.score = -1
         }
     }
 
-
+    // evaluate each possible move
     Ext.each(this.moves, function (move) {
         if (move.score >= 0) {
-            console.log("evaluating move " + move.pos)
             this.visit(move.pos)
         }
     }, this)
 
+    // sort moves by score
     this.moves = this.moves.sort(function (a, b) {
         return b.score - a.score
     })
 
-    console.log(this.moves)
+    // filter moves, keeping only those of the highest score
+    var bestScore = this.moves[0].score
+    var filteredMoves = []
+    Ext.each(this.moves, function (move) {
+        if (move.score == bestScore) {
+            filteredMoves.push(move)
+        }
+    })
+    this.moves = filteredMoves
 
-    console.log("agent playing: " + this.moves[0].col)
-    this.game.drop(PLAYER1, this.moves[0].col)
+    // choose a random move (these moves should all have the same score by now)
+    var moveIdx = Math.floor(Math.random() * this.moves.length)
+    this.game.drop(PLAYER1, this.moves[moveIdx].col)
 }
 
 Agent.prototype.visit = function (p0)
@@ -98,8 +110,6 @@ Agent.prototype.visit = function (p0)
             p1Max = p1Count
         }
     }
-    console.log("p0Max: " + p0Max)
-    console.log("p1Max: " + p1Max)
 
     if (p1Max >= 3) {
         // for the win
