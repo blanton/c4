@@ -22,7 +22,8 @@ var app = new Ext.Application({
         })
 
         this.agent = new Agent({
-            game: this.game
+            game: this.game,
+            level: DEFAULT_LEVEL
         })
 
         this.renderer = new Renderer({

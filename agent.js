@@ -1,6 +1,7 @@
 function Agent (cfg)
 {
     this.game = cfg.game
+    this.level = cfg.level
 
     this.game.addListener('pieceDropped', this.onPieceDropped, this)
 
@@ -42,18 +43,22 @@ Agent.prototype.run = function ()
     }
 
     // evaluate each possible move
-    Ext.each(this.moves, function (move) {
-        if (move.score >= 0) {
-            this.analyzeStage1(move.pos)
-        }
-    }, this)
+    if (this.level >= 1) {
+        Ext.each(this.moves, function (move) {
+            if (move.score >= 0) {
+                this.analyzeStage1(move.pos)
+            }
+        }, this)
+    }
 
     // evaluate each possible move
-    Ext.each(this.moves, function (move) {
-        if (move.score >= 0) {
-            this.analyzeStage2(move.pos)
-        }
-    }, this)
+    if (this.level >= 2) {
+        Ext.each(this.moves, function (move) {
+            if (move.score >= 0) {
+                this.analyzeStage2(move.pos)
+            }
+        }, this)
+    }
 
 
     // sort moves by score
