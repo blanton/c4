@@ -44,9 +44,17 @@ Agent.prototype.run = function ()
     // evaluate each possible move
     Ext.each(this.moves, function (move) {
         if (move.score >= 0) {
-            this.visit(move.pos)
+            this.analyzeStage1(move.pos)
         }
     }, this)
+
+    // evaluate each possible move
+    Ext.each(this.moves, function (move) {
+        if (move.score >= 0) {
+            this.analyzeStage2(move.pos)
+        }
+    }, this)
+
 
     // sort moves by score
     this.moves = this.moves.sort(function (a, b) {
@@ -68,7 +76,7 @@ Agent.prototype.run = function ()
     this.game.drop(PLAYER1, this.moves[moveIdx].col)
 }
 
-Agent.prototype.visit = function (p0)
+Agent.prototype.analyzeStage1 = function (p0)
 {
     var lists = this.game.board.visit(p0)
 
@@ -113,10 +121,55 @@ Agent.prototype.visit = function (p0)
 
     if (p1Max >= 3) {
         // for the win
-        this.moves[p0.x].score += 1000
+        this.moves[p0.x].score += 10000
     }
     if (p0Max >= 3) {
         // block user
-        this.moves[p0.x].score += 100
+        this.moves[p0.x].score += 1000
     }
+}
+
+Agent.prototype.analyzeStage2 = function (p0)
+{
+    var lists = this.game.board.visit(p0)
+
+    console.log("stage2: " + p0.toString())
+
+    var p1Sum = 0
+    var p1Max = 0
+    for (var dir = 0; dir < lists.length - 1; dir += 2) {
+        var p1Count = 0
+        var list0 = lists[dir]
+        var list1 = lists[dir + 1]
+        for (var i = 1; i < list0.length; i++) {
+            if (this.game.board.at(list0[i]) == PLAYER0) {
+                break
+            }
+            if (this.game.board.at(list0[i]) == PLAYER1) {
+                p1Count += 10
+            }
+            if (this.game.board.at(list0[i]) == EMPTY) {
+                p1Count += 1
+            }
+        }
+        for (var i = 1; i < list1.length; i++) {
+            if (this.game.board.at(list1[i]) == PLAYER0) {
+                break
+            }
+            if (this.game.board.at(list1[i]) == PLAYER1) {
+                p1Count += 10
+            }
+            if (this.game.board.at(list1[i]) == EMPTY) {
+                p1Count += 1
+            }
+        }
+        console.log("p1Count: " + p1Count)
+        p1Sum += p1Count
+        p1Max = Math.max(p1Max, p1Count)
+    }
+
+    console.log("p1Sum: " + p1Sum)
+    console.log("p1Max: " + p1Max)
+
+    this.moves[p0.x].score += (p1Sum + p1Max)
 }
