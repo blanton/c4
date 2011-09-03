@@ -38,11 +38,12 @@ Agent.prototype.run = function ()
         }
         // prevent playing full cols (position is given iff an empty is found)
         if (!move.pos) {
-            move.score = -1
+            move.score = -1000000
         }
     }
 
     // evaluate each possible move
+
     if (this.level >= 1) {
         Ext.each(this.moves, function (move) {
             if (move.score >= 0) {
@@ -51,11 +52,19 @@ Agent.prototype.run = function ()
         }, this)
     }
 
-    // evaluate each possible move
     if (this.level >= 2) {
         Ext.each(this.moves, function (move) {
             if (move.score >= 0) {
                 this.analyzeStage2(move.pos)
+            }
+        }, this)
+    }
+
+
+    if (this.level >= 3) {
+        Ext.each(this.moves, function (move) {
+            if (move.score >= 0) {
+                this.analyzeStage3(move.pos)
             }
         }, this)
     }
@@ -81,6 +90,9 @@ Agent.prototype.run = function ()
     this.game.drop(PLAYER1, this.moves[moveIdx].col)
 }
 
+/**
+ * attempt to win, or avoid losing
+ */
 Agent.prototype.analyzeStage1 = function (p0)
 {
     var lists = this.game.board.visit(p0)
@@ -134,6 +146,9 @@ Agent.prototype.analyzeStage1 = function (p0)
     }
 }
 
+/**
+ * find helpful moves
+ */
 Agent.prototype.analyzeStage2 = function (p0)
 {
     var lists = this.game.board.visit(p0)
@@ -177,4 +192,40 @@ Agent.prototype.analyzeStage2 = function (p0)
     console.log("p1Max: " + p1Max)
 
     this.moves[p0.x].score += (p1Sum + p1Max)
+}
+
+/**
+ * predict the threat of the op's next move being a win
+ */
+Agent.prototype.analyzeStage3 = function (p0)
+{
+    var p0Up = p0.add(vec2(0, -1))
+    if (!this.game.board.contains(p0Up)) {
+        return
+    }
+    var lists = this.game.board.visit(p0Up)
+
+    var p0Max = 0
+    for (var dir = 0; dir < lists.length - 1; dir += 2) {
+        var p0Count = 0
+        var list0 = lists[dir]
+        var list1 = lists[dir + 1]
+        for (var i = 1; i < list0.length; i++) {
+            if (this.game.board.at(list0[i]) != PLAYER0) {
+                break
+            }
+            p0Count++
+        }
+        for (var i = 1; i < list1.length; i++) {
+            if (this.game.board.at(list1[i]) != PLAYER0) {
+                break
+            }
+            p0Count++
+        }
+        p0Max = Math.max(p0Count, p0Max)
+    }
+
+    if (p0Max >= 3) {
+        this.moves[p0.x].score -= 100
+    }
 }
