@@ -22,7 +22,7 @@ var app = new Ext.Application({
         })
 
         // create game
-        this.game = new Game(PLAYER0)
+        this.game = new Game({})
 
         // callback to print out winner
         this.game.addListener('win', function (player) {
