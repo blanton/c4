@@ -1,4 +1,15 @@
 
+/**
+ * Game tracks game logic.
+ *
+ * Extends Observable for event support.
+ *
+ * Tracks turn, the board, and whether or not the game is locked (after win).
+ */
+
+/**
+ * Create a game.
+ */
 Game = Ext.extend(Ext.util.Observable, {
     constructor: function (config) {
         this.addEvents({
@@ -18,6 +29,11 @@ Game = Ext.extend(Ext.util.Observable, {
     }
 })
 
+/**
+ * Drop a piece for player at given column.
+ *
+ * Functions as a wrapper around board.drop().
+ */
 Game.prototype.drop = function (playerId, colId)
 {
     if (this.locked || playerId != this.turn) {
@@ -34,6 +50,9 @@ Game.prototype.drop = function (playerId, colId)
     this.fireEvent('pieceDropped', newPieceLocation)
 }
 
+/**
+ * Check the board for a win now that p0 has been placed.
+ */
 Game.prototype.winCheck = function (p0)
 {
     var lists = this.board.visit(p0)

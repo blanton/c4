@@ -1,3 +1,12 @@
+
+/**
+ * The interface is an HTML 5 Canvas.  The Renderer hooks into the game and
+ * provides a drawing routine.
+ */
+
+/**
+ * Create a Renderer attached to given game.
+ */
 Renderer = Ext.extend(Object, {
     constructor: function (config) {
         this.game = config.game
@@ -8,6 +17,9 @@ Renderer = Ext.extend(Object, {
     }
 })
 
+/**
+ * Render after events.
+ */
 Renderer.prototype.render = function ()
 {
     var radius = 40
@@ -15,9 +27,12 @@ Renderer.prototype.render = function ()
     var ctx = document.getElementById('canvas').getContext('2d')
 
     ctx.clearRect(0, 0, 700, 600)
+
+    // draw yellow background
     ctx.fillStyle = "yellow"
     ctx.fillRect(0, 0, 700, 600)
 
+    // draw pieces
     for (var x = 0; x < this.game.board.nbCols; x++) {
         for (var y = 0; y < this.game.board.nbRows; y++) {
             var p = vec2(x * 100 + radius + 10, y * 100 + radius + 10)
@@ -44,6 +59,9 @@ Renderer.prototype.render = function ()
 
 }
 
+/**
+ * Hook into win to supply notifications.
+ */
 Renderer.prototype.onWin = function (player)
 {
     // defer is so rendering can take place before alert

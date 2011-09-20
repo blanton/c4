@@ -1,3 +1,13 @@
+
+/**
+ * AI Agent.
+ *
+ * Based on fuzzy logic.
+ */
+
+/**
+ * Create Agent with supplied game and level.
+ */
 function Agent (cfg)
 {
     this.game = cfg.game
@@ -7,6 +17,9 @@ function Agent (cfg)
 
 }
 
+/**
+ * After the user plays, play a piece of our own.
+ */
 Agent.prototype.onPieceDropped = function (p)
 {
     var player = this.game.board.at(p)
@@ -16,6 +29,9 @@ Agent.prototype.onPieceDropped = function (p)
     this.run()
 }
 
+/**
+ * Entry point.
+ */
 Agent.prototype.run = function ()
 {
     this.moves = []

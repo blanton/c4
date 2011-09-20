@@ -1,3 +1,11 @@
+
+/**
+ * Internal representation of a c4 board.
+ */
+
+/**
+ * Create with the given rows and columns.
+ */
 function Board (r, c)
 {
     this.nbRows = r
@@ -39,6 +47,11 @@ Board.prototype.toString = function ()
     return nfo
 }
 
+/**
+ * Drop a piece at the given column.
+ *
+ * The Game is responsible for turn management.
+ */
 Board.prototype.drop = function (playerId, colId)
 {
     console.assert(colId < this.nbCols)
@@ -53,6 +66,9 @@ Board.prototype.drop = function (playerId, colId)
     return null
 }
 
+/**
+ * Helper function determines if coordinate p is contained in this board.
+ */
 Board.prototype.contains = function (p)
 {
     if (p.x < 0 || p.x >= this.nbCols ||
@@ -63,11 +79,28 @@ Board.prototype.contains = function (p)
     return true
 }
 
+/**
+ * Returns the value at point p.
+ */
 Board.prototype.at = function (p)
 {
     return this.cols[p.x][p.y]
 }
 
+/**
+ * Utility function that finds cells related to p0.
+ *
+ * This returns an array of arrays.  The first level contains arrays in various
+ * directions emanating from p0.
+ *
+ * The arrays are arranged such that, for example, W to E may be checked.  N to
+ * S.  And so on.
+ *
+ *   - W, E
+ *   - NW, SE
+ *   - N, S
+ *   - NE, SW
+ */
 Board.prototype.visit = function (p0)
 {
     var results = []
